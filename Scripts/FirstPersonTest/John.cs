@@ -6,7 +6,7 @@ public class John : KinematicBody
     // Physics
     float moveSpeed = 5.0f;
     float jumpForce = 5.0f;
-    float gravity  = 12.0f;
+    float gravity  = 9.8f;
     // Camera
     float minLookAngle = -90.0f;
     float maxLookAngle = 90.0f;
@@ -16,9 +16,14 @@ public class John : KinematicBody
     Vector2 mouseDelta = new Vector2();
  
     Camera camera;
-
+    public override void _Ready()
+    {
+        base._Ready();
+        camera = (Camera) GetNode("Camera");
+    }
     public override void _PhysicsProcess(float delta)
     {
+        GD.Print(delta.ToString());
         base._PhysicsProcess(delta);
         // Reset the x and z velocity
         velocity.x=0;
@@ -28,17 +33,17 @@ public class John : KinematicBody
         // Movement Inputs
         if(Input.IsActionPressed("move_forward")) input.y-=1;
         if(Input.IsActionPressed("move_backward")) input.y+=1;
-           if(Input.IsActionPressed("move_left")) input.x-=1;
+        if(Input.IsActionPressed("move_left")) input.x-=1;
         if(Input.IsActionPressed("move_right")) input.x+=1;
         
         // Noramalize the vector
         input = input.Normalized();
 
         // get the forward and right directions
-        var forward = GlobalTransform.basis.z;
-        var right = GlobalTransform.basis.x;
+        var forward = GlobalTransform.basis.z;  
+        var right = GlobalTransform.basis.x;  
 
-        var relativeDirection = (forward * input.y) + (right * input.x);
+        var relativeDirection = (forward * input.y) + (right * input.x); // Final Direction
 
         // Set the velocity
         velocity.x = relativeDirection.x * moveSpeed;
@@ -58,5 +63,9 @@ public class John : KinematicBody
 
     }
 
+   
 
 }
+
+
+   
